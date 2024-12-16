@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">AnswerCard</string>
+
+    <string name="title_name">答题卡识别</string>
+    <string name="first_bar">图片识别</string>
+    <string name="second_bar">数据处理</string>
+    <string name="setting">设置</string>
+
 </resources>
