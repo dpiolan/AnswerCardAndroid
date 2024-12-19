@@ -17,7 +17,4 @@ class CameraDem(context: Context) {
 
     }
 
-
-
-
 }

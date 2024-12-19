@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/content_gray"
+    app:layout_constraintTop_toBottomOf="@id/title_firstBar"
+    app:layout_constraintLeft_toLeftOf="parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/FB_firstT"
+            android:theme="@style/TextView_Small">
+        </TextView>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="这里输入名称ID"
+            android:textColorHint="@color/white_sm"
+            android:id="@+id/FB_idInput"
+            android:textColor="@color/white"
+            android:theme="@style/TextView_Small" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/FB_secondCheck"
+                android:theme="@style/TextView_Small"
+                android:textColor="@color/white"
+                android:id="@+id/FB_isAnswersInput"
+                android:buttonTint="@color/white" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone"
+                android:id="@+id/FB_secondInput">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:theme="@style/TextView_Small"
+                    android:text="@string/FB_secondT" />
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="这里输入答案"
+                    android:id="@+id/FB_answersInput"
+                    android:textColorHint="@color/white_sm" />
+            </LinearLayout>
+        </LinearLayout>
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/FB_thirdCheck"
+            android:theme="@style/TextView_Small"
+            android:textColor="@color/white"
+            android:buttonTint="@color/white"
+            android:id="@+id/FB_isStudentNum"/>
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/FB_fourthCheck"
+            android:theme="@style/TextView_Small"
+            android:textColor="@color/white"
+            android:buttonTint="@color/white"
+            android:id="@+id/FB_isDataBase"/>
+
+    </LinearLayout>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:id="@+id/FB_nextButton"
+        android:text="继续"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

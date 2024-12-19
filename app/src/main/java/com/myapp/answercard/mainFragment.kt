@@ -1,6 +1,7 @@
 package com.myapp.answercard
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -10,6 +11,7 @@ import android.view.animation.ScaleAnimation
 import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
+
 
 class MainFragment(context:MainActivity):Fragment() {
     private val mainActivity = context
@@ -43,10 +45,13 @@ class MainFragment(context:MainActivity):Fragment() {
                 c.duration = 100
                 cardView.animation = c
                 cardView.animation.start()
-
             }
             else if(event.actionMasked == MotionEvent.ACTION_UP){
                 cardView.alpha = 0f
+
+                val intent:Intent = Intent()
+                intent.setClass(mainActivity,Recognition::class.java)
+                startActivity(intent)
 
             }
             true
@@ -76,7 +81,6 @@ class MainFragment(context:MainActivity):Fragment() {
 
         val setting:View = view.findViewById(R.id.settings)
         setting.setOnClickListener{
-
         }
 
         return view
