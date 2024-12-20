@@ -11,6 +11,7 @@ import android.view.animation.ScaleAnimation
 import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 
 
 class MainFragment(context:MainActivity):Fragment() {
@@ -48,11 +49,7 @@ class MainFragment(context:MainActivity):Fragment() {
             }
             else if(event.actionMasked == MotionEvent.ACTION_UP){
                 cardView.alpha = 0f
-
-                val intent:Intent = Intent()
-                intent.setClass(mainActivity,Recognition::class.java)
-                startActivity(intent)
-
+                mainActivity.viewModel.pushFragment(FBFragment(mainActivity))
             }
             true
         }

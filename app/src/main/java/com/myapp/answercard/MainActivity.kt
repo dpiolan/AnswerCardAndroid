@@ -1,14 +1,21 @@
 package com.myapp.answercard
 
 import android.os.Bundle
+import android.view.KeyEvent
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
+import androidx.lifecycle.ViewModelProvider
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var transaction: FragmentTransaction
+
+    val viewModel:MainViewModel by lazy {
+        ViewModelProvider(this)[MainViewModel::class.java]
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -19,11 +26,23 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        transaction = supportFragmentManager.beginTransaction()
-        val currentFragment =supportFragmentManager.findFragmentById(R.id.main)
-        if (currentFragment == null){
-            val fragment = MainFragment(this)
-            transaction.add(R.id.main,fragment).commit()
+        viewModel.initFragmentsManger(this,R.id.main)
+        if (viewModel.getLastFragment<Fragment>() == null) {
+            viewModel.pushFragment(MainFragment(this))
+        }else{
+            viewModel.newFreshFragment()
         }
+    }
+
+    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
+        if (keyCode == KeyEvent.KEYCODE_BACK){
+            if (viewModel.getLastFragment<Fragment>() != null){
+                viewModel.popFragment<Fragment>()
+                return true
+            }
+        }
+
+
+        return super.onKeyDown(keyCode, event)
     }
 }
