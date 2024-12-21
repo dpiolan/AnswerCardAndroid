@@ -3,10 +3,12 @@ package com.myapp.answercard
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
+import java.util.Stack
 
 class MainViewModel():ViewModel() {
 
     private var fragments:MutableList<Fragment> = mutableListOf()
+
     private var fragmentLayout: Int = 0
     private var activate: AppCompatActivity? = null
 
@@ -35,7 +37,8 @@ class MainViewModel():ViewModel() {
     fun <T:Fragment> popFragment():T?{
         val frag:T? = fragments.removeLastOrNull() as? T?
         val transaction = activate?.supportFragmentManager?.beginTransaction()
-        if (transaction == null) return null
+        transaction?:return null
+        transaction.setCustomAnimations(R.anim.pop_enter,R.anim.pop_exit)
         if(frag != null){
             transaction.remove(frag)
             if (fragments.isEmpty()) throw Error("Can't PopFragment")
@@ -48,6 +51,7 @@ class MainViewModel():ViewModel() {
     fun <T:Fragment> pushFragment(fragment:T){
         val transaction = activate?.supportFragmentManager?.beginTransaction()
         transaction?:return
+        transaction.setCustomAnimations(R.anim.push_enter,R.anim.push_exit)
         if (!fragments.isEmpty()) {
             val frag: T = fragments.last() as T
             transaction.remove(frag)
