@@ -6,10 +6,5 @@ import android.os.Parcelable
 
 class SqlServiceManger {
 
-    fun c(){
-        val v:Bundle = Bundle()
-
-
-    }
 
 }

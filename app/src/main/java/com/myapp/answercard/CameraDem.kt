@@ -13,8 +13,6 @@ class CameraDem(context: Context) {
 
     init {
         cameraIdList = cameraManger.cameraIdList
-
-
     }
 
 }
