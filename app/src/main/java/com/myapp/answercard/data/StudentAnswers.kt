@@ -1,4 +1,4 @@
-package com.myapp.answercard
+package com.myapp.answercard.data
 
 data class StudentAnswers(
     var studentID:String,

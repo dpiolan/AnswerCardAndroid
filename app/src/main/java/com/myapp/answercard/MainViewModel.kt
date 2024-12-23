@@ -1,9 +1,11 @@
 package com.myapp.answercard
 
+import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
-import java.util.Stack
+import com.myapp.answercard.data.ConfigData
+import com.myapp.answercard.database.SqlHelper
 
 class MainViewModel():ViewModel() {
 
@@ -12,11 +14,12 @@ class MainViewModel():ViewModel() {
     private var fragmentLayout: Int = 0
     private var activate: AppCompatActivity? = null
 
-    private lateinit var configData:ConfigData
-    fun initConfigData(nameID:String):ConfigData{
-        configData = VarMangerConfig.GetInstance().getConfig(nameID)
-        return configData
+    private val sqlHelper:SqlHelper by lazy {
+        SqlHelper(activate as Context,"AnswerCards",null,1)
     }
+
+
+    private lateinit var configData: ConfigData
     fun initFragmentsManger(activate:AppCompatActivity,fragmentLayout:Int){
         this.activate = activate
         this.fragmentLayout = fragmentLayout
@@ -30,7 +33,7 @@ class MainViewModel():ViewModel() {
 
     }
 
-    fun getConfigData():ConfigData{
+    fun getConfigData(): ConfigData {
         return configData
     }
 

@@ -1,8 +1,6 @@
 package com.myapp.answercard
 
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +9,7 @@ import android.widget.CheckBox
 import android.widget.EditText
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
+import com.myapp.answercard.data.ConfigData
 
 
 class FBFragment(context:MainActivity):Fragment() {
@@ -27,21 +26,9 @@ class FBFragment(context:MainActivity):Fragment() {
     private lateinit var isStudentNum:CheckBox
     private lateinit var isDataBase:CheckBox
     private lateinit var nextButton:Button
+    private lateinit var databaseView:View
+    private lateinit var nameIDInputTip:View
 
-//    private class textWatcher:TextWatcher{
-//        override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-//            TODO("Not yet implemented")
-//        }
-//
-//        override fun afterTextChanged(p0: Editable?) {
-//            TODO("Not yet implemented")
-//        }
-//
-//        override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-//            TODO("Not yet implemented")
-//        }
-//    }
-//
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,6 +49,8 @@ class FBFragment(context:MainActivity):Fragment() {
         isDataBase = v.findViewById(R.id.FB_isDataBase)
         backReturn = v.findViewById(R.id.back_return)
         nextButton = v.findViewById(R.id.FB_nextButton)
+        databaseView = v.findViewById(R.id.view_ndatabase)
+        nameIDInputTip = v.findViewById(R.id.FB_idInputTip)
         bindAct()
         return view
     }
@@ -72,23 +61,37 @@ class FBFragment(context:MainActivity):Fragment() {
             mainActivity.viewModel.popFragment<FBFragment>()
         }
 
+
+        isDataBase.setOnCheckedChangeListener{_,b->
+            configData.isDataBase = b
+            if (b){
+                databaseView.visibility = View.VISIBLE
+            }else{
+                databaseView.visibility = View.GONE
+            }
+        }
+
+
         nameIdInput.doOnTextChanged { text, start, before, count ->
             configData.nameID = text.toString()
         }
+
+
         isAnswersInput.setOnCheckedChangeListener{_,isChecked:Boolean->
             configData.isAnswer = isChecked
             if(isChecked){
                 secondInput.visibility = View.VISIBLE
+            }else{
+                secondInput.visibility = View.GONE
             }
         }
+
         answersInput.doOnTextChanged{text,start,before,count->
             configData.answers = text.toString()
         }
+
         isStudentNum.setOnCheckedChangeListener { compoundButton, b ->
             configData.isStudentNum = b
-        }
-        isDataBase.setOnCheckedChangeListener{_,b->
-            configData.isDataBase = b
         }
 
     }

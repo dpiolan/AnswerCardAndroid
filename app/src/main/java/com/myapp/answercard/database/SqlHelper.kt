@@ -1,16 +1,14 @@
-package com.myapp.answercard.service.sql
+package com.myapp.answercard.database
 
 import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteDatabase.CursorFactory
 import android.database.sqlite.SQLiteOpenHelper
-import androidx.activity.result.contract.ActivityResultContracts
+import com.myapp.answercard.data.ConfigData
+import com.myapp.answercard.data.StudentAnswers
 
-import com.myapp.answercard.ConfigData
-import com.myapp.answercard.StudentAnswers
-
-class SqlHelper(context:Context,name:String,factory:CursorFactory,version:Int):SQLiteOpenHelper(context,name,factory,version) {
+class SqlHelper(context:Context,name:String,factory:CursorFactory?,version:Int):SQLiteOpenHelper(context,name,factory,version) {
 
     private fun configDataCastToContentValues(configData: ConfigData):ContentValues{
         fun boolCastToInt(bool:Boolean):Int{
@@ -61,7 +59,7 @@ class SqlHelper(context:Context,name:String,factory:CursorFactory,version:Int):S
         )
     }
 
-    fun insertAnswer(configData: ConfigData,studentAnswers: StudentAnswers){
+    fun insertAnswer(configData: ConfigData, studentAnswers: StudentAnswers){
         writableDatabase.insert(
             configData.nameID,
             null,
@@ -69,12 +67,13 @@ class SqlHelper(context:Context,name:String,factory:CursorFactory,version:Int):S
         )
     }
 
-    fun findAllConfigData(configData:ConfigData):MutableList<ConfigData>{
+    fun findAllConfigData(configData: ConfigData):MutableList<ConfigData>{
+
         val cursor = readableDatabase.query(
             ConfigTableName,
             null,
-            "nameID=?",
-            arrayOf("%${configData.nameID}%"),
+            "nameID LIKE",
+            arrayOf("${configData.nameID}%"),
             null,
             null,
             null,
@@ -100,5 +99,45 @@ class SqlHelper(context:Context,name:String,factory:CursorFactory,version:Int):S
 
         }
         return returns
+    }
+
+    fun findStudentAnswers(configData: ConfigData, studentID:String): StudentAnswers?{
+
+        val cursor = readableDatabase.query(
+            configData.nameID,
+            null,
+            "studentID = ?",
+            arrayOf(studentID),
+            null,
+            null,
+            null,
+            "LIMIT 1"
+        )
+        if (cursor.count == 0){
+            return null
+        }
+        cursor.moveToFirst()
+        return StudentAnswers(
+            studentID,
+            cursor.getString(cursor.getColumnIndexOrThrow("answers")).toList()
+        )
+    }
+
+    fun updateConfigData(configData: ConfigData){
+        writableDatabase.update(
+            ConfigTableName,
+            configDataCastToContentValues(configData),
+            "nameID = ?",
+            arrayOf(configData.nameID)
+        )
+    }
+
+    fun deleteConfigData(configData: ConfigData){
+        writableDatabase.delete(
+            ConfigTableName,
+            "nameID = ?",
+            arrayOf(configData.nameID)
+        )
+        writableDatabase.execSQL("DROP TABLE ${configData.nameID}")
     }
 }

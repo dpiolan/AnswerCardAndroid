@@ -1,7 +1,6 @@
 package com.myapp.answercard
 
 import android.annotation.SuppressLint
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -11,7 +10,6 @@ import android.view.animation.ScaleAnimation
 import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 
 
 class MainFragment(context:MainActivity):Fragment() {

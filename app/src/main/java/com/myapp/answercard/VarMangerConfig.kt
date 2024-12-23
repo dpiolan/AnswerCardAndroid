@@ -1,9 +1,11 @@
 package com.myapp.answercard
 
+import com.myapp.answercard.data.ConfigData
+
 class VarMangerConfig {
     val listConfig:MutableList<ConfigData> = mutableListOf()
 
-    public fun getConfig(nameId:String):ConfigData{
+    public fun getConfig(nameId:String): ConfigData {
         val data = listConfig.find { configData->
             configData.nameID == nameId
         }
