@@ -17,7 +17,6 @@ class FBFragment(context:MainActivity):Fragment() {
     private var configData: ConfigData = ConfigData("",false,null,false,false)
     private val mainActivity = context
 
-
     private lateinit var backReturn:View
     private lateinit var nameIdInput:EditText
     private lateinit var isAnswersInput:CheckBox
@@ -28,7 +27,6 @@ class FBFragment(context:MainActivity):Fragment() {
     private lateinit var nextButton:Button
     private lateinit var databaseView:View
     private lateinit var nameIDInputTip:View
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,7 +58,6 @@ class FBFragment(context:MainActivity):Fragment() {
         backReturn.setOnClickListener{
             mainActivity.viewModel.popFragment<FBFragment>()
         }
-
 
         isDataBase.setOnCheckedChangeListener{_,b->
             configData.isDataBase = b

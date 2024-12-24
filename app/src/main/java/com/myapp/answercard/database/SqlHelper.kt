@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase.CursorFactory
 import android.database.sqlite.SQLiteOpenHelper
 import com.myapp.answercard.data.ConfigData
 import com.myapp.answercard.data.StudentAnswers
+import com.myapp.answercard.data.StudentAnswersWithSource
 
 class SqlHelper(context:Context,name:String,factory:CursorFactory?,version:Int):SQLiteOpenHelper(context,name,factory,version) {
 
@@ -47,16 +48,28 @@ class SqlHelper(context:Context,name:String,factory:CursorFactory?,version:Int):
 
 
     fun CreateSheetByConfigData(configData: ConfigData){
+
+        if (!configData.isDataBase) return
         writableDatabase.insert(
             ConfigTableName,
             null,
             configDataCastToContentValues(configData)
         )
-        writableDatabase.execSQL(
-            "CREATE TABLE ${configData.nameID}(" +
-                    "studentID Text," +
-                    "selects CHAR(${configData.selectsNum}))",
-        )
+        if (configData.isAnswer){
+            writableDatabase.execSQL(
+                    "CREATE TABLE ${configData.nameID}(" +
+                            "studentID Text," +
+                            "answers CHAR)" +
+                            "source INT")
+
+        }
+        else {
+            writableDatabase.execSQL(
+                "CREATE TABLE ${configData.nameID}(" +
+                        "studentID Text," +
+                        "answers CHAR(${configData.selectsNum}))",
+            )
+        }
     }
 
     fun insertAnswer(configData: ConfigData, studentAnswers: StudentAnswers){
@@ -123,6 +136,28 @@ class SqlHelper(context:Context,name:String,factory:CursorFactory?,version:Int):
         )
     }
 
+    fun findStudentAnswersWithSource(configData: ConfigData,studentID:String):StudentAnswersWithSource?{
+        val cursor = readableDatabase.query(
+            configData.nameID,
+            null,
+            "studentID = ?",
+            arrayOf(studentID),
+            null,
+            null,
+            null,
+            "LIMIT 1"
+        )
+        if (cursor.count == 0){
+            return null
+        }
+        cursor.moveToFirst()
+        return StudentAnswersWithSource(
+            studentID,
+            cursor.getString(cursor.getColumnIndexOrThrow("answers")).toList(),
+            cursor.getInt(cursor.getColumnIndexOrThrow("source"))
+        )
+    }
+
     fun updateConfigData(configData: ConfigData){
         writableDatabase.update(
             ConfigTableName,
@@ -140,4 +175,21 @@ class SqlHelper(context:Context,name:String,factory:CursorFactory?,version:Int):
         )
         writableDatabase.execSQL("DROP TABLE ${configData.nameID}")
     }
+
+    companion object{
+        private var INSTANCE:SqlHelper? = null
+
+        fun initInstance(context:Context,name:String,factory:CursorFactory?,version:Int):SqlHelper{
+            if(INSTANCE != null) throw Error("The SqlHelper Instance have init")
+
+            INSTANCE = SqlHelper(context,name,factory,version)
+            return INSTANCE as SqlHelper
+
+        }
+        fun getInstance():SqlHelper{
+            return INSTANCE?:throw Error("The SqlHelper Instance have not init")
+        }
+
+    }
+
 }

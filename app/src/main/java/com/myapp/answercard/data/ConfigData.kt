@@ -15,4 +15,13 @@ data class ConfigData(var nameID:String,
         configData.isDataBase,
         configData.selectsNum
         )
+
+    fun copy(configData: ConfigData):Unit{
+        this.nameID = configData.nameID
+        this.isAnswer = configData.isAnswer
+        this.answers = configData.answers
+        this.isStudentNum = configData.isStudentNum
+        this.isDataBase = configData.isDataBase
+        this.selectsNum = configData.selectsNum
+    }
 }
