@@ -14,5 +14,7 @@
     <string name="FB_thirdCheck">是否识别学号</string>
     <string name="FB_fourthCheck">是否记录到数据库</string>
 
+    <string name="DataBase_name">AnswersCard</string>
+
 
 </resources>

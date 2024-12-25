@@ -9,7 +9,7 @@ import com.myapp.answercard.data.ConfigData
 import com.myapp.answercard.data.StudentAnswers
 import com.myapp.answercard.data.StudentAnswersWithSource
 
-class SqlHelper(context:Context,name:String,factory:CursorFactory?,version:Int):SQLiteOpenHelper(context,name,factory,version) {
+class SqlHelper private constructor(context:Context,name:String,factory:CursorFactory?,version:Int):SQLiteOpenHelper(context,name,factory,version) {
 
     private fun configDataCastToContentValues(configData: ConfigData):ContentValues{
         fun boolCastToInt(bool:Boolean):Int{
@@ -180,8 +180,7 @@ class SqlHelper(context:Context,name:String,factory:CursorFactory?,version:Int):
         private var INSTANCE:SqlHelper? = null
 
         fun initInstance(context:Context,name:String,factory:CursorFactory?,version:Int):SqlHelper{
-            if(INSTANCE != null) throw Error("The SqlHelper Instance have init")
-
+            if(INSTANCE != null) return INSTANCE as SqlHelper
             INSTANCE = SqlHelper(context,name,factory,version)
             return INSTANCE as SqlHelper
 
@@ -189,7 +188,5 @@ class SqlHelper(context:Context,name:String,factory:CursorFactory?,version:Int):
         fun getInstance():SqlHelper{
             return INSTANCE?:throw Error("The SqlHelper Instance have not init")
         }
-
     }
-
 }

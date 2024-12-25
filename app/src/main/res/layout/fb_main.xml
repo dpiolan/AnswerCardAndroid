@@ -169,7 +169,6 @@
                         android:layout_height="wrap_content"
                         android:id="@+id/FB_idInputTip"
                         android:orientation="vertical"/>
-
                 </LinearLayout>
 
 

@@ -1,5 +1,6 @@
 package com.myapp.answercard
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -7,6 +8,8 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
+import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import com.myapp.answercard.data.ConfigData
@@ -26,7 +29,49 @@ class FBFragment(context:MainActivity):Fragment() {
     private lateinit var isDataBase:CheckBox
     private lateinit var nextButton:Button
     private lateinit var databaseView:View
-    private lateinit var nameIDInputTip:View
+    private lateinit var nameIDInputTip:LinearLayout
+
+    private fun refreshLayout(){
+        //根据configData更新layout
+        nameIdInput.setText(configData.nameID)
+        isAnswersInput.isChecked = configData.isAnswer
+        secondInput.visibility = if (configData.isAnswer) View.VISIBLE else View.GONE
+        answersInput.setText(configData.answers)
+        isStudentNum.isChecked = configData.isStudentNum
+        isDataBase.isChecked = configData.isDataBase
+        databaseView.visibility = if (configData.isDataBase) View.VISIBLE else View.GONE
+    }
+
+    private class SelectItem(context:Context):androidx.appcompat.widget.AppCompatTextView(context){
+        private lateinit var configData: ConfigData
+        constructor(context: Context,configData: ConfigData,fragment: FBFragment):this(context){
+            this.configData = configData
+            this.setText(configData.nameID)
+            this.visibility = View.GONE
+            this.setOnClickListener{
+                fragment.configData.copy(this.configData)
+                fragment.refreshLayout()
+            }
+        }
+
+        fun updateConfigData(configData: ConfigData){
+            this.configData.copy(configData)
+            this.setText(this.configData.nameID)
+        }
+    }
+
+    private fun changeNameIdInputTipContent(listConfigData:List<ConfigData>){
+
+        val size = if(listConfigData.size > 5) listConfigData.size - 1 else 4
+        if(size < nameIDInputTip.childCount-1 ){
+            for (i in 0..nameIDInputTip.childCount-1){
+
+            }
+
+        }
+
+
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,11 +113,17 @@ class FBFragment(context:MainActivity):Fragment() {
             }
         }
 
-
         nameIdInput.doOnTextChanged { text, start, before, count ->
             configData.nameID = text.toString()
         }
+        nameIdInput.setOnFocusChangeListener { view, b ->
+            if(b){
+                nameIDInputTip.visibility = View.VISIBLE
+            }else{
+                nameIDInputTip.visibility = View.GONE
+            }
 
+        }
 
         isAnswersInput.setOnCheckedChangeListener{_,isChecked:Boolean->
             configData.isAnswer = isChecked
@@ -90,6 +141,13 @@ class FBFragment(context:MainActivity):Fragment() {
         isStudentNum.setOnCheckedChangeListener { compoundButton, b ->
             configData.isStudentNum = b
         }
+
+        for (i in 0..4){
+            nameIDInputTip.addView(
+                SelectItem(this.mainActivity,this.configData,this)
+            )
+        }
+
 
     }
 

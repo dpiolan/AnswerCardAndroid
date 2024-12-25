@@ -3,6 +3,8 @@
     <color name="black">#FF101010</color>
     <color name="white">#FFFFFFFF</color>
 
+    <color name="white_sm">#A0FFFFFF</color>
+
     <color name="content_gray">#FF303030</color>
 
 </resources>
