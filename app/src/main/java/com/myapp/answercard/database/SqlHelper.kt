@@ -85,7 +85,7 @@ class SqlHelper private constructor(context:Context,name:String,factory:CursorFa
         val cursor = readableDatabase.query(
             ConfigTableName,
             null,
-            "nameID LIKE",
+            "nameID LIKE ",
             arrayOf("${configData.nameID}%"),
             null,
             null,

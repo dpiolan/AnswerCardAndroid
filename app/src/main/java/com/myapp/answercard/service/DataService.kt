@@ -88,7 +88,7 @@ class DataService : Service() {
         }
     }
 
-    fun findAllConfigData(configData: ConfigData,CallBack: (MutableList<ConfigData>?) -> Unit = {}){
+    fun findAllConfigData(configData: ConfigData,CallBack: (List<ConfigData>) -> Unit = {}){
         scope.launch {
             val b = withContext(Dispatchers.IO ){
                 try {
@@ -96,7 +96,7 @@ class DataService : Service() {
 
                 }catch (e:Exception){
                     errorStack.push(e)
-                    return@withContext null
+                    return@withContext listOf<ConfigData>()
                 }
             }
             CallBack(b)

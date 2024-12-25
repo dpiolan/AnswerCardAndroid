@@ -13,6 +13,7 @@ import android.widget.TextView
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import com.myapp.answercard.data.ConfigData
+import kotlin.math.min
 
 
 class FBFragment(context:MainActivity):Fragment() {
@@ -60,17 +61,19 @@ class FBFragment(context:MainActivity):Fragment() {
         }
     }
 
+    private fun mid(s:Int,a:Int,b:Int):Int{
+        if (s > b) return b
+        if (s < a) return a
+        return s
+    }
+
     private fun changeNameIdInputTipContent(listConfigData:List<ConfigData>){
 
-        val size = if(listConfigData.size > 5) listConfigData.size - 1 else 4
-        if(size < nameIDInputTip.childCount-1 ){
-            for (i in 0..nameIDInputTip.childCount-1){
-
-            }
-
+        val size = mid(listConfigData.size-1,-1,4)
+        for (i in 0..4){
+            if(i <= size) (nameIDInputTip.getChildAt(i) as SelectItem).updateConfigData(listConfigData[i])
+            else nameIDInputTip.getChildAt(i).visibility = View.GONE
         }
-
-
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -115,7 +118,12 @@ class FBFragment(context:MainActivity):Fragment() {
 
         nameIdInput.doOnTextChanged { text, start, before, count ->
             configData.nameID = text.toString()
+            this.mainActivity.viewModel.dataService?.findAllConfigData(this.configData){
+                listConfigData->
+                this.changeNameIdInputTipContent(listConfigData)
+            }
         }
+
         nameIdInput.setOnFocusChangeListener { view, b ->
             if(b){
                 nameIDInputTip.visibility = View.VISIBLE
