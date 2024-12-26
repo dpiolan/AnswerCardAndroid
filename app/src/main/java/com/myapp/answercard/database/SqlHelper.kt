@@ -85,31 +85,27 @@ class SqlHelper private constructor(context:Context,name:String,factory:CursorFa
         val cursor = readableDatabase.query(
             ConfigTableName,
             null,
-            "nameID LIKE ",
-            arrayOf("${configData.nameID}%"),
+            "nameID LIKE ?",
+            arrayOf("%${configData.nameID}%"),
             null,
             null,
             null,
-            "LIMIT 5"
+            "5"
         )
         fun cast(i:Int):Boolean{
-            if(i==1){
-                return true
-            }
-            return false
+            return i==1
         }
         val returns = mutableListOf<ConfigData>()
         with(cursor){
          while (moveToNext()){
              val tmpConfigData = ConfigData(configData)
-             tmpConfigData.nameID = getString(getColumnIndexOrThrow("nameId"))
+             tmpConfigData.nameID = getString(getColumnIndexOrThrow("nameID"))
              tmpConfigData.isAnswer = cast(getInt(getColumnIndexOrThrow("isAnswer")))
              tmpConfigData.answers = getString(getColumnIndexOrThrow("answers"))
              tmpConfigData.isStudentNum = cast(getInt(getColumnIndexOrThrow("isStudentNum")))
              tmpConfigData.selectsNum = getInt(getColumnIndexOrThrow("selectsNum"))
             returns.add(tmpConfigData)
          }
-
         }
         return returns
     }
@@ -124,16 +120,19 @@ class SqlHelper private constructor(context:Context,name:String,factory:CursorFa
             null,
             null,
             null,
-            "LIMIT 1"
+            "1"
         )
         if (cursor.count == 0){
             return null
         }
-        cursor.moveToFirst()
-        return StudentAnswers(
-            studentID,
-            cursor.getString(cursor.getColumnIndexOrThrow("answers")).toList()
-        )
+
+        if(cursor.moveToNext()){
+            return StudentAnswers(
+                studentID,
+                cursor.getString(cursor.getColumnIndexOrThrow("answers")).toList()
+            )
+        }
+        return null
     }
 
     fun findStudentAnswersWithSource(configData: ConfigData,studentID:String):StudentAnswersWithSource?{
@@ -145,17 +144,19 @@ class SqlHelper private constructor(context:Context,name:String,factory:CursorFa
             null,
             null,
             null,
-            "LIMIT 1"
+            "1"
         )
         if (cursor.count == 0){
             return null
         }
-        cursor.moveToFirst()
-        return StudentAnswersWithSource(
-            studentID,
-            cursor.getString(cursor.getColumnIndexOrThrow("answers")).toList(),
-            cursor.getInt(cursor.getColumnIndexOrThrow("source"))
-        )
+        if (cursor.moveToNext()) {
+            return StudentAnswersWithSource(
+                studentID,
+                cursor.getString(cursor.getColumnIndexOrThrow("answers")).toList(),
+                cursor.getInt(cursor.getColumnIndexOrThrow("source"))
+            )
+        }
+        return null
     }
 
     fun updateConfigData(configData: ConfigData){

@@ -21,4 +21,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "AnswerCard"
 include(":app")
- 
+include(":OpenCV")

@@ -70,7 +70,9 @@ class DataService : Service() {
                     return@withContext false
                 }
             }
-            callBack(b)
+            withContext(Dispatchers.Main){
+                callBack(b)
+            }
         }
     }
 
@@ -84,6 +86,9 @@ class DataService : Service() {
                     errorStack.push(e)
                     return@withContext false
                 }
+            }
+            withContext(Dispatchers.Main){
+                CallBack(b)
             }
         }
     }
@@ -99,7 +104,9 @@ class DataService : Service() {
                     return@withContext listOf<ConfigData>()
                 }
             }
-            CallBack(b)
+            withContext(Dispatchers.Main){
+                CallBack(b)
+            }
         }
     }
 
@@ -113,7 +120,9 @@ class DataService : Service() {
                     return@withContext null
                 }
             }
-            CallBack(b)
+            withContext(Dispatchers.Main){
+                CallBack(b)
+            }
         }
     }
 
@@ -128,7 +137,9 @@ class DataService : Service() {
                     return@withContext false
                 }
             }
-            CallBack(b)
+            withContext(Dispatchers.Main){
+                CallBack(b)
+            }
         }
     }
 
@@ -143,12 +154,26 @@ class DataService : Service() {
                     return@withContext false
                 }
             }
-            CallBack(b)
+            withContext(Dispatchers.Main){
+                CallBack(b)
+            }
         }
     }
 
-    fun getLastError():Exception{
-        return errorStack.lastElement()
+    fun getLastError():Exception?{
+        try {
+            return errorStack.lastElement()
+        }catch (e:RuntimeException){
+            return null
+        }
+    }
+
+    fun popError():Exception?{
+        try {
+            return errorStack.pop()
+        }catch (e:RuntimeException){
+            return null
+        }
     }
 
     companion object{

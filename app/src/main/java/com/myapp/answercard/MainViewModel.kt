@@ -41,8 +41,6 @@ class MainViewModel(): ViewModel() {
         }
     }
 
-    private val configData = ConfigData("",false,null,false,false)
-
     fun initFragmentsManger(activate:AppCompatActivity,fragmentLayout:Int){
         this.activate = activate
         this.fragmentLayout = fragmentLayout
@@ -57,10 +55,6 @@ class MainViewModel(): ViewModel() {
         val transaction = activate?.supportFragmentManager?.beginTransaction()
         transaction?:return
         transaction.add(this.fragmentLayout,fragments.last()).commit()
-    }
-
-    fun getConfigData(): ConfigData {
-        return configData
     }
 
     fun <T:Fragment> popFragment():T?{

@@ -1,7 +1,9 @@
 package com.myapp.answercard
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,12 +11,13 @@ import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.LinearLayout
-import android.widget.TextView
+
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import com.myapp.answercard.data.ConfigData
-import kotlin.math.min
+import com.myapp.answercard.opencvActivity.opencvActivity
 
+private val TAG = "FBFragment"
 
 class FBFragment(context:MainActivity):Fragment() {
 
@@ -57,7 +60,7 @@ class FBFragment(context:MainActivity):Fragment() {
 
         fun updateConfigData(configData: ConfigData){
             this.configData.copy(configData)
-            this.setText(this.configData.nameID)
+            super.setText(configData.nameID)
         }
     }
 
@@ -71,7 +74,11 @@ class FBFragment(context:MainActivity):Fragment() {
 
         val size = mid(listConfigData.size-1,-1,4)
         for (i in 0..4){
-            if(i <= size) (nameIDInputTip.getChildAt(i) as SelectItem).updateConfigData(listConfigData[i])
+            if(i <= size) {
+                val k = nameIDInputTip.getChildAt(i) as SelectItem
+                k.updateConfigData(listConfigData[i])
+                k.visibility = View.VISIBLE
+            }
             else nameIDInputTip.getChildAt(i).visibility = View.GONE
         }
     }
@@ -116,10 +123,20 @@ class FBFragment(context:MainActivity):Fragment() {
             }
         }
 
+        for (i in 0..4){
+            nameIDInputTip.addView(
+                SelectItem(this.mainActivity,this.configData,this)
+            )
+        }
+
         nameIdInput.doOnTextChanged { text, start, before, count ->
             configData.nameID = text.toString()
             this.mainActivity.viewModel.dataService?.findAllConfigData(this.configData){
                 listConfigData->
+                val lasterror = mainActivity.viewModel.dataService?.popError()
+                if (lasterror != null){
+                    Log.e(TAG,"Error:\t"+lasterror.toString())
+                }
                 this.changeNameIdInputTipContent(listConfigData)
             }
         }
@@ -150,10 +167,10 @@ class FBFragment(context:MainActivity):Fragment() {
             configData.isStudentNum = b
         }
 
-        for (i in 0..4){
-            nameIDInputTip.addView(
-                SelectItem(this.mainActivity,this.configData,this)
-            )
+        nextButton.setOnClickListener{
+            mainActivity.viewModel.dataService?.configData?.copy(this.configData)
+            val intent = Intent(mainActivity,opencvActivity::class.java)
+            startActivity(intent)
         }
 
 

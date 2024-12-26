@@ -47,6 +47,7 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.7")
     implementation("androidx.constraintlayout:constraintlayout:2.2.0")
     implementation("androidx.cardview:cardview:1.0.0")
+    implementation(project(":OpenCV"))
 
 
     testImplementation(libs.junit)
