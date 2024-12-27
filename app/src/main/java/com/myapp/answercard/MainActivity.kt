@@ -47,8 +47,6 @@ class MainActivity : AppCompatActivity() {
                 return true
             }
         }
-
-
         return super.onKeyDown(keyCode, event)
     }
 }

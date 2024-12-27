@@ -3,21 +3,22 @@ package com.myapp.answercard.opencvActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.WindowManager
+import android.widget.Toast
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.myapp.answercard.R
 import org.opencv.android.CameraActivity
 import org.opencv.android.CameraBridgeViewBase
-import org.opencv.android.CameraBridgeViewBase.CvCameraViewListener2
 import org.opencv.android.OpenCVLoader
-import org.opencv.core.Mat
 import java.util.Collections
 
 private val TAG = "OpencvActivity"
 
-class opencvActivity : CameraActivity(),CvCameraViewListener2{
+class OpencvActivity : CameraActivity(){
 
-    private var mOpenCvCameraView:CameraBridgeViewBase? = null
+    private val myCameraViewManger:MyCameraViewManger by lazy {
+        MyCameraViewManger(this,R.id.camera_surface)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
@@ -31,36 +32,23 @@ class opencvActivity : CameraActivity(),CvCameraViewListener2{
         if(OpenCVLoader.initLocal()){
             Log.d(TAG,"opencv init success")
         }else{
-            Log.d(TAG,"opencv init fail")
+            Toast.makeText(this,"OpencvLoader.InitLocal error",Toast.LENGTH_SHORT)
             return
         }
-        mOpenCvCameraView =findViewById(R.id.camera_surface)
-        mOpenCvCameraView?.setCvCameraViewListener(this)
     }
 
     override protected fun getCameraViewList(): MutableList<out CameraBridgeViewBase> {
-        return Collections.singletonList(mOpenCvCameraView).filterNotNull().toMutableList()
+        return Collections.singletonList(myCameraViewManger.getCameraBridgeViewBase()).filterNotNull().toMutableList()
     }
 
     override fun onPause() {
         super.onPause()
-        mOpenCvCameraView?.disableView()
+        myCameraViewManger.onPause()
     }
 
     override fun onResume() {
         super.onResume()
-        mOpenCvCameraView?.enableView()
+        myCameraViewManger.onResume()
     }
-
-    override fun onCameraFrame(inputFrame: CameraBridgeViewBase.CvCameraViewFrame?): Mat {
-        return inputFrame?.rgba()?:Mat()
-    }
-
-    override fun onCameraViewStopped() {
-    }
-
-    override fun onCameraViewStarted(width: Int, height: Int) {
-    }
-
 
 }

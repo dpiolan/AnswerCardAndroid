@@ -15,7 +15,7 @@ import android.widget.LinearLayout
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import com.myapp.answercard.data.ConfigData
-import com.myapp.answercard.opencvActivity.opencvActivity
+import com.myapp.answercard.opencvActivity.OpencvActivity
 
 private val TAG = "FBFragment"
 
@@ -169,7 +169,7 @@ class FBFragment(context:MainActivity):Fragment() {
 
         nextButton.setOnClickListener{
             mainActivity.viewModel.dataService?.configData?.copy(this.configData)
-            val intent = Intent(mainActivity,opencvActivity::class.java)
+            val intent = Intent(mainActivity,OpencvActivity::class.java)
             startActivity(intent)
         }
 

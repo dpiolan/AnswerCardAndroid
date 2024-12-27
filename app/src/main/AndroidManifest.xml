@@ -20,7 +20,7 @@
         android:theme="@style/Theme.AnswerCard"
         tools:targetApi="31">
         <activity
-            android:name=".opencvActivity.opencvActivity"
+            android:name=".opencvActivity.OpencvActivity"
             android:exported="false" />
 
         <service
