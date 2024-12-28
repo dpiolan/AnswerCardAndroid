@@ -4,18 +4,10 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.ServiceConnection
 import android.os.IBinder
-import android.util.Log
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.myapp.answercard.data.ConfigData
-import com.myapp.answercard.database.SqlHelper
 import com.myapp.answercard.service.DataService
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 
 private val TAG = "MainViewModel"

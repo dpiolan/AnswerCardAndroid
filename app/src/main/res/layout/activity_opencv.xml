@@ -11,12 +11,24 @@
 
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <org.opencv.android.JavaCameraView
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:id="@+id/camera_surface"
+            android:layout_height="0dp"
+            app:layout_constraintHeight_percent="0.8"
+            app:layout_constraintTop_toTopOf="parent">
+            <com.myapp.answercard.opencvActivity.MyCameraView
+
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
                 opencv:show_fps = "true"
-                opencv:camera_id="any"/>
+                opencv:camera_id="any"
+                android:id="@+id/camera_surface"
+                />
+
+<!--            -->
+<!--            <org.opencv.android.JavaCameraView-->
+<!--                android:layout_width="fill_parent"-->
+<!--                android:layout_height="fill_parent"-->
+<!--                android:id="@+id/camera_surface"-->
+<!--                opencv:show_fps = "true"-->
+<!--                opencv:camera_id="any"/>-->
         </FrameLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
