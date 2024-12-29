@@ -5,13 +5,16 @@ import org.opencv.android.CameraBridgeViewBase
 import org.opencv.android.CameraBridgeViewBase.CvCameraViewListener2
 import org.opencv.core.Mat
 import android.util.Log
+import android.widget.ImageView
+import com.myapp.answercard.R
 import com.myapp.answercard.opencvActivity.core.ProcFindContours
 
-class MyCameraViewManger(context:Activity,frameId:Int):CvCameraViewListener2 {
+class MyCameraViewManger(context:Activity,frameId:Int):CvCameraViewListener2{
     private final val TAG = "MyCameraViewManger"
     private val stackFrameCallback:MutableList<ProcFrameCallback> = mutableListOf()
     private val cameraBridgeViewBase = context.findViewById<MyCameraView>(frameId)
     private val context:Activity = context
+    private lateinit var procFindContours: ProcFindContours
 
     interface ProcFrameCallback{
         fun onFrame(inputFrame: Mat):Mat
@@ -21,8 +24,15 @@ class MyCameraViewManger(context:Activity,frameId:Int):CvCameraViewListener2 {
         val width = Math.round(1200 / Math.pow(2.0,0.5)).toInt()
         cameraBridgeViewBase.setMaxFrameSize(width, 1200)
         cameraBridgeViewBase.setCvCameraViewListener(this)
-        this.addStackFrameCallback(ProcFindContours())
+        procFindContours = ProcFindContours()
+        with(context as OpencvActivity){
+            context.findViewById<ImageView>(R.id.camera_button).setOnClickListener{
+                procFindContours.clocked = !procFindContours.clocked
+            }
 
+        }
+
+        this.addStackFrameCallback(procFindContours)
     }
 
     fun addStackFrameCallback(cv:ProcFrameCallback){
@@ -32,7 +42,6 @@ class MyCameraViewManger(context:Activity,frameId:Int):CvCameraViewListener2 {
     fun removeStackFrameCallback(cv:ProcFrameCallback){
         stackFrameCallback.remove(cv)
     }
-
 
     fun onResume(){
         cameraBridgeViewBase.enableView()
@@ -46,8 +55,7 @@ class MyCameraViewManger(context:Activity,frameId:Int):CvCameraViewListener2 {
     }
 
     override fun onCameraFrame(inputFrame: CameraBridgeViewBase.CvCameraViewFrame?): Mat {
-        val size = inputFrame?.rgba()?.size()
-        var mat:Mat = inputFrame?.gray()?:Mat()
+        var mat:Mat = inputFrame?.rgba()?:Mat()
         try {
             for (c in stackFrameCallback){
                mat = c.onFrame(mat)
@@ -55,8 +63,6 @@ class MyCameraViewManger(context:Activity,frameId:Int):CvCameraViewListener2 {
         }catch (e:Exception){
             Log.d(TAG,e.toString())
         }
-
-//        Log.d(TAG,"inputFrameSize width = ${size?.width} height = ${size?.height}")
         return mat
     }
 

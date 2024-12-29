@@ -1,11 +1,12 @@
 package com.myapp.answercard.opencvActivity.core
 
+import org.opencv.core.Size
 import java.io.FileInputStream
 
 data class Settings private constructor(
     val version:String
 ){
-
+    var imgSize = Size(480.0,720.0)
     companion object{
         private var INSTANCE:Settings? = null
         fun getInstance():Settings{

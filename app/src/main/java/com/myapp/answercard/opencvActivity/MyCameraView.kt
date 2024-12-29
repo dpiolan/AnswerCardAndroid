@@ -13,4 +13,5 @@ class MyCameraView(context: Context, attrs:AttributeSet):JavaCamera2View(context
 
     init{
     }
+
 }

@@ -9,26 +9,39 @@
     android:background="@color/black"
     tools:context=".opencvActivity.OpencvActivity">
 
-        <FrameLayout
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintHeight_percent="0.85"
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="@color/black"
+        android:id="@+id/CV_Frame">
+        <com.myapp.answercard.opencvActivity.MyCameraView
+
+            android:layout_height="match_parent"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            app:layout_constraintHeight_percent="0.8"
-            app:layout_constraintTop_toTopOf="parent">
-            <com.myapp.answercard.opencvActivity.MyCameraView
+            opencv:show_fps = "true"
+            opencv:camera_id="any"
+            android:backgroundTint="@color/black"
+            android:id="@+id/camera_surface"
+            />
+    </FrameLayout>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintHeight_percent="0.15"
+        app:layout_constraintTop_toBottomOf="@id/CV_Frame">
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@drawable/camera_button"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:id="@+id/camera_button"/>
 
-                android:layout_height="match_parent"
-                android:layout_width="match_parent"
-                opencv:show_fps = "true"
-                opencv:camera_id="any"
-                android:id="@+id/camera_surface"
-                />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-<!--            -->
-<!--            <org.opencv.android.JavaCameraView-->
-<!--                android:layout_width="fill_parent"-->
-<!--                android:layout_height="fill_parent"-->
-<!--                android:id="@+id/camera_surface"-->
-<!--                opencv:show_fps = "true"-->
-<!--                opencv:camera_id="any"/>-->
-        </FrameLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
