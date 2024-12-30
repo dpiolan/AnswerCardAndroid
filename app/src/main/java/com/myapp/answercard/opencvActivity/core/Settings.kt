@@ -1,7 +1,6 @@
 package com.myapp.answercard.opencvActivity.core
 
 import org.opencv.core.Size
-import java.io.FileInputStream
 
 data class Settings private constructor(
     val version:String
@@ -15,6 +14,11 @@ data class Settings private constructor(
             }
             return INSTANCE!!
         }
+
+        fun releaseInstance(){
+            INSTANCE = null
+        }
+
     }
 
 }

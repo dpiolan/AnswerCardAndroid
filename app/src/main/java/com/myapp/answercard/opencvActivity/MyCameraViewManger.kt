@@ -8,13 +8,41 @@ import android.util.Log
 import android.widget.ImageView
 import com.myapp.answercard.R
 import com.myapp.answercard.opencvActivity.core.ProcFindContours
+import kotlin.io.path.fileVisitor
 
-class MyCameraViewManger(context:Activity,frameId:Int):CvCameraViewListener2{
+class MyCameraViewManger private constructor(context:Activity,frameId:Int):CvCameraViewListener2{
     private final val TAG = "MyCameraViewManger"
     private val stackFrameCallback:MutableList<ProcFrameCallback> = mutableListOf()
     private val cameraBridgeViewBase = context.findViewById<MyCameraView>(frameId)
     private val context:Activity = context
     private lateinit var procFindContours: ProcFindContours
+
+    enum class STATUS(val value:Int){
+
+        USER_USING(0b1),
+        PROC_TRANSLATE01(0b10),
+        PROC_HAVEGETANSWERS(0b100),
+        PROC_HAVEGETSTUDENTID(0b1000),
+        PROC_HAVEGETSOURCE(0b10000),
+    }
+
+    class StatusManger{
+        private var status:Int = 0
+
+        fun addStatus(status:STATUS){
+            this.status = this.status or status.value
+        }
+
+        fun removeStatus(status:STATUS){
+            this.status =  ((this.status and status.value).inv()) and this.status
+        }
+
+        fun getStatus(status:STATUS):Boolean{
+            return  (this.status and status.value) == status.value
+        }
+    }
+
+    var status = StatusManger()
 
     interface ProcFrameCallback{
         fun onFrame(inputFrame: Mat):Mat
@@ -25,11 +53,12 @@ class MyCameraViewManger(context:Activity,frameId:Int):CvCameraViewListener2{
         cameraBridgeViewBase.setMaxFrameSize(width, 1200)
         cameraBridgeViewBase.setCvCameraViewListener(this)
         procFindContours = ProcFindContours()
+        status.addStatus(STATUS.USER_USING)
+
         with(context as OpencvActivity){
             context.findViewById<ImageView>(R.id.camera_button).setOnClickListener{
-                procFindContours.clocked = !procFindContours.clocked
+                status.removeStatus(STATUS.USER_USING)
             }
-
         }
 
         this.addStackFrameCallback(procFindContours)
@@ -70,7 +99,18 @@ class MyCameraViewManger(context:Activity,frameId:Int):CvCameraViewListener2{
     }
 
     override fun onCameraViewStarted(width: Int, height: Int) {
-
     }
 
+    companion object{
+        private var INSTANCE:MyCameraViewManger? = null
+        fun initInstance(context: Activity,frameId: Int){
+            INSTANCE = MyCameraViewManger(context,frameId)
+        }
+        fun getInstance():MyCameraViewManger{
+            return INSTANCE!!
+        }
+        fun releaseInstance(){
+            INSTANCE = null
+        }
+    }
 }

@@ -19,8 +19,6 @@ class ProcFindContours():MyCameraViewManger.ProcFrameCallback{
     private var saveTranslateMat = Mat()
     private var saveInputFrame = Mat()
 
-    var clocked = false
-
     interface PerspectiveCallback{
         fun onFrameCompleted(inputMat: Mat,translateMat:Mat?)
     }
@@ -80,7 +78,7 @@ class ProcFindContours():MyCameraViewManger.ProcFrameCallback{
     }
 
     override fun onFrame(inputFrame: Mat): Mat {
-        if (!clocked) {
+        if (MyCameraViewManger.getInstance().status.getStatus(MyCameraViewManger.STATUS.USER_USING)) {
             var mat: Mat = preProcess(inputFrame)
             val contour = findContourExternal(mat)
             if (contour != null) {
@@ -106,6 +104,7 @@ class ProcFindContours():MyCameraViewManger.ProcFrameCallback{
                     -1,
                     Scalar(0.0, 255.0, 0.0)
                 )
+
             }
             return inputFrame
         }else{

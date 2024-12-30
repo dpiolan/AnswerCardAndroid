@@ -7,6 +7,7 @@ import android.widget.Toast
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.myapp.answercard.R
+import com.myapp.answercard.opencvActivity.core.Settings
 import org.opencv.android.CameraActivity
 import org.opencv.android.CameraBridgeViewBase
 import org.opencv.android.OpenCVLoader
@@ -16,8 +17,9 @@ private val TAG = "OpencvActivity"
 
 class OpencvActivity : CameraActivity(){
 
-    private val myCameraViewManger:MyCameraViewManger by lazy {
-        MyCameraViewManger(this,R.id.camera_surface)
+    val myCameraViewManger:MyCameraViewManger by lazy {
+        MyCameraViewManger.initInstance (this,R.id.camera_surface)
+        MyCameraViewManger.getInstance()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,6 +41,12 @@ class OpencvActivity : CameraActivity(){
 
     override protected fun getCameraViewList(): MutableList<out CameraBridgeViewBase> {
         return Collections.singletonList(myCameraViewManger.getCameraBridgeViewBase()).filterNotNull().toMutableList()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        MyCameraViewManger.releaseInstance()
+        Settings.releaseInstance()
     }
 
     override fun onPause() {
