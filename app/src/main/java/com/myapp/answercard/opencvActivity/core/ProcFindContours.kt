@@ -2,6 +2,7 @@ package com.myapp.answercard.opencvActivity.core
 
 
 import com.myapp.answercard.opencvActivity.MyCameraViewManger
+import com.myapp.answercard.opencvActivity.Settings
 import org.opencv.core.Mat
 import org.opencv.core.MatOfPoint
 import org.opencv.core.MatOfPoint2f
@@ -12,7 +13,7 @@ import org.opencv.imgproc.Imgproc
 
 class ProcFindContours():MyCameraViewManger.ProcFrameCallback{
 
-    private val settings:Settings = Settings.getInstance()
+    private val settings: Settings = Settings.getInstance()
 
     private var perspectiveCallback:PerspectiveCallback? = null
 

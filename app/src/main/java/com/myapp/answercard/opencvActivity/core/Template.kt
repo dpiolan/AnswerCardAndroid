@@ -19,7 +19,7 @@ data class Template(
                 Point(j_b_p2.getDouble(0),j_b_p1.getDouble(1))
             )
             val j_q = json.getJSONArray("Questions")
-            val questions = List<Ponit2>(j_q.length(),{index: Int -> Ponit2() })
+            val questions = List(j_q.length(),{index: Int -> Ponit2() })
             for (i in 0..j_q.length()){
                 questions[i].apply {
                     point1.x =j_q.getJSONArray(i).getJSONArray(0).getDouble(0)

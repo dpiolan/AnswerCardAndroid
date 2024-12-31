@@ -1,6 +1,7 @@
 package com.myapp.answercard.opencvActivity.core
 
 import com.myapp.answercard.opencvActivity.MyCameraViewManger
+import com.myapp.answercard.opencvActivity.Settings
 import org.opencv.core.Mat
 import org.opencv.core.Size
 import org.opencv.imgproc.Imgproc
@@ -20,7 +21,7 @@ class Questions:MyCameraViewManger.ProcFrameCallback,ProcFindContours.Perspectiv
     override fun onFrameCompleted(inputMat: Mat, translateMat: Mat?) {
         // 为了减少开支,所以在这里进行透视变换
         val inputFrame = Mat()
-        Imgproc.warpPerspective(inputMat,inputFrame,translateMat,Settings.getInstance().imgSize)
+        Imgproc.warpPerspective(inputMat,inputFrame,translateMat, Settings.getInstance().imgSize)
     }
 
     override fun onFrame(inputFrame: Mat): Mat {

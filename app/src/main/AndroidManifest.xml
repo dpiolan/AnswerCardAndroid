@@ -10,6 +10,7 @@
     <uses-feature android:name="android.hardware.camera.front.autofocus" android:required="false"/>
 
     <application
+        android:requestLegacyExternalStorage="true"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -38,5 +39,4 @@
             </intent-filter>
         </activity>
     </application>
-
 </manifest>
